@@ -1,0 +1,31 @@
+= makeheaders
+A fork of makeheaders, for easy use as an external Bazel repository.
+
+Original source and docs: [https://www.hwaci.com/sw/mkhdr/](https://www.hwaci.com/sw/mkhdr/)
+
+[Documentation](https://fossil-scm.org/home/doc/trunk/tools/makeheaders.html) (from Fossil)
+
+== Guidance
+
+=== global vars
+
+"When a global variable is defined in a .c file, an “extern”
+declaration of that variable is placed in the header of every .c file
+that uses the variable."
+
+You may need to initialize global pointers to avoid "Unresolved
+symbols". For example if you have something like `char *foo;` in one
+file and you use it in other files, the generated headers will contain
+`extern char *foo;`. But with some linkers this may end up as a Common
+symbol that does not get resolved.  Initializing it to NULL may fix the problem.
+
+=== interface headers
+
+Produces using `-H` flag, which "generates a single include file on standard output. But unlike small -h, the big -H only emits prototypes and declarations that have been designated as “exportable”. The idea is that -H will generate an include file that defines the interface to a library."
+
+Probably will not work as a header _within_ the library, since it will
+not include code needed to deal with `LOCAL` declarations, for
+example. So you need to generate "internal" headers (without `-H`) as
+well as an interface header with `-H`.
+
+
