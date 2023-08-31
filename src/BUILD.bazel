@@ -6,7 +6,10 @@ cc_binary(
         "-O3",
         "-Wno-unused-function"
     ] + select({
-        "@platforms//os:linux": ["-std=gnu11"],
+        "@platforms//os:linux": [
+            "-std=gnu11",
+            "-Wno-stringop-truncation"
+        ],
         "//conditions:default": ["-std=c11"],
     }),
     linkstatic=1,
