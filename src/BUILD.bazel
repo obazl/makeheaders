@@ -8,6 +8,8 @@ cc_binary(
     ] + select({
         "@platforms//os:linux": [
             "-std=gnu11",
+            ## strncpy warnings from makeheaders.c
+            "-Wno-stringop-overflow",
             "-Wno-stringop-truncation"
         ],
         "//conditions:default": ["-std=c11"],
