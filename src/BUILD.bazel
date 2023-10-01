@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
 cc_binary(
     name  = "makeheaders",
     srcs  = ["makeheaders.c"],
@@ -13,6 +15,10 @@ cc_binary(
             "-Wno-stringop-truncation"
         ],
         "//conditions:default": ["-std=c11"],
+    }),
+    linkopts = select({
+        "@platforms//os:macos": ["-Xlinker", "-no_warn_duplicate_libraries"],
+        "//conditions:default": []
     }),
     linkstatic=1,
     visibility = ["//visibility:public"]
