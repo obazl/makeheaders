@@ -19,6 +19,11 @@ def _makeheaders_impl(ctx):
     # print("GENDIR: %s" % ctx.genfiles_dir.path)
     # print("BLDFILE: %s" % ctx.build_file_path)
 
+    if ctx.attr.outdir:
+        pfx = ctx.attr.outdir + "/"
+    else:
+        pfx = ""
+
     ifiles = []
     ofiles = []
     input_args = []
@@ -35,36 +40,36 @@ def _makeheaders_impl(ctx):
         # if ctx.label.package == paths.dirname(src.short_path):
         if x == y:
             if src.is_source:
-                f = ctx.actions.declare_file(src.basename)
+                f = ctx.actions.declare_file(pfx + src.basename)
                 # print("Symlinking %s" % f);
                 ctx.actions.symlink(output=f, target_file = src)
                 ifiles.append(f)
                 input_args.append(f.path)
                 o = paths.replace_extension(f.basename, ".h")
                 if multi_outputs:
-                    ofiles.append(ctx.actions.declare_file(o))
+                    ofiles.append(ctx.actions.declare_file(pfx + o))
             else:
                 ifiles.append(src)
                 input_args.append(src.path)
                 o = paths.replace_extension(src.basename, ".h")
                 if multi_outputs:
-                    ofile = ctx.actions.declare_file(o, sibling = src)
+                    ofile = ctx.actions.declare_file(pfx + o, sibling = src)
                     ofiles.append(ofile)
         else:
             if src.is_source:
-                f = ctx.actions.declare_file(src.basename)
+                f = ctx.actions.declare_file(pfx + src.basename)
                 ctx.actions.symlink(output=f, target_file = src)
                 ifiles.append(f)
                 input_args.append(f.path)
                 o = paths.replace_extension(f.basename, ".h")
                 if multi_outputs:
-                    ofiles.append(ctx.actions.declare_file(o))
+                    ofiles.append(ctx.actions.declare_file(pfx + o))
             else:
                 ifiles.append(src)
                 input_args.append(src.path)
                 o = paths.replace_extension(src.basename, ".h")
                 if multi_outputs:
-                    ofile = ctx.actions.declare_file(o, sibling = src)
+                    ofile = ctx.actions.declare_file(pfx + o, sibling = src)
                     ofiles.append(ofile)
 
     ################################
@@ -82,7 +87,7 @@ def _makeheaders_impl(ctx):
 
         if x == y:
             if src.is_source:
-                f = ctx.actions.declare_file(src.basename)
+                f = ctx.actions.declare_file(pfx + src.basename)
                 ctx.actions.symlink(output=f, target_file = src)
                 ifiles.append(f)
                 input_args.append("{src}:{p}/{hdr}".format(
@@ -91,7 +96,7 @@ def _makeheaders_impl(ctx):
                     hdr = hdr))
                 # o = paths.replace_extension(f.basename, ".h")
                 if multi_outputs:
-                    ofiles.append(ctx.actions.declare_file(hdr))
+                    ofiles.append(ctx.actions.declare_file(pfx + hdr))
             else:
                 ifiles.append(src)
                 # input_args.append(src.path + ":" + hdr)
@@ -101,11 +106,11 @@ def _makeheaders_impl(ctx):
                     hdr = hdr))
                 # o = paths.replace_extension(src.basename, ".h")
                 if multi_outputs:
-                    ofile = ctx.actions.declare_file(hdr, sibling = src)
+                    ofile = ctx.actions.declare_file(pfx + hdr, sibling = src)
                     ofiles.append(ofile)
         else:
             if src.is_source:
-                f = ctx.actions.declare_file(src.basename)
+                f = ctx.actions.declare_file(pfx + src.basename)
                 ctx.actions.symlink(output=f, target_file = src)
                 ifiles.append(f)
                 # input_args.append(f.path + ":" + hdr)
@@ -115,7 +120,7 @@ def _makeheaders_impl(ctx):
                     hdr = hdr))
                 # o = paths.replace_extension(f.basename, ".h")
                 if multi_outputs:
-                    ofiles.append(ctx.actions.declare_file(hdr))
+                    ofiles.append(ctx.actions.declare_file(pfx + hdr))
             else:
                 ifiles.append(src)
                 # input_args.append(src.path + ":" + hdr)
@@ -125,13 +130,13 @@ def _makeheaders_impl(ctx):
                     hdr = hdr))
                 # o = paths.replace_extension(src.basename, ".h")
                 if multi_outputs:
-                    ofile = ctx.actions.declare_file(hdr, sibling = src)
+                    ofile = ctx.actions.declare_file(pfx + hdr, sibling = src)
                     ofiles.append(ofile)
 
     for src in ctx.files.additional_srcs:
         if ctx.label.package == paths.dirname(src.short_path):
             if src.is_source:
-                f = ctx.actions.declare_file(src.basename)
+                f = ctx.actions.declare_file(pfx + src.basename)
                 ctx.actions.symlink(output=f, target_file = src)
                 ifiles.append(f)
                 input_args.append(f.path + ":")
@@ -211,7 +216,7 @@ makeheaders = rule(
             allow_files = [".c", ".h"],
             mandatory = False
         ),
-        # "outs": attr.output_list(
+        "outdir": attr.string(),
         "out": attr.output(
             # mandatory = False
         ),
