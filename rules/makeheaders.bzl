@@ -232,7 +232,7 @@ makeheaders = rule(
         ),
         "_tool": attr.label(
             allow_single_file = True,
-            default = ":makeheaders",
+            default = "@makeheaders//src:makeheaders",
             executable = True,
             cfg = "host"
         )
