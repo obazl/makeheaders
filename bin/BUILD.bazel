@@ -1,0 +1,4 @@
+alias(
+    name = "makeheaders",
+    actual = "//src:makeheaders"
+)
