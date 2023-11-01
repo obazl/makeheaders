@@ -8,7 +8,6 @@
 #define TRACE_LOG(fmt, ...)
 #define TRACE_EXIT
 #define TRACE_ENTRY_MSG(fmt, ...)
-#define TRACE_S7_DUMP(msg, x)
 
 #define LOG_DEBUG(lvl, fmt, ...)
 #define LOG_ERROR(lvl, fmt, ...)
