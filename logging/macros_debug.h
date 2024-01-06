@@ -1,3 +1,17 @@
+/*
+  WARNING: client must define local (namespaced) DEBUG_LEVEL
+  and TRACE_FLAG macros:
+#if defined(PROFILE_fastbuild)
+#define DEBUG_LEVEL foo_debug
+int  DEBUG_LEVEL;
+#define TRACE_FLAG foo_trace
+bool TRACE_FLAG;
+#endif
+
+This makes fine-grained logging possible; different files can
+use different DEBUG_LEVEL flag names in the same build.
+ */
+
 #include "liblogc.h"
 
 #if INTERFACE
