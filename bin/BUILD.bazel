@@ -18,7 +18,9 @@ cc_binary(
     linkopts = select({
         "@platforms//os:macos": [
             # bug in rules_cc dups -lc++
-            "-Xlinker", "-no_warn_duplicate_libraries"],
+            # WARN: this flag only available in clang v. 15?
+            # "-Xlinker", "-no_warn_duplicate_libraries"
+        ],
         "//conditions:default": []
     }),
     linkstatic=1,
