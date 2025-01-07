@@ -4,6 +4,7 @@
 .bazel
 bazel-*
 *.gz
+tarballs
 
 # Prerequisites
 *.d
